@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
     UITextField *loginTextField;
     UITextField *passwordTextField;
     UIButton *authorizeButton;
+    UIAlertController *alert;
 }
 
 @end

@@ -57,9 +57,6 @@
     CGFloat buttonPositionY = passwordPositionY;
     [self createAuthorizeButton:buttonPositionY];
     
-    //create round buttons
-    [self createRoundButton:buttonPositionY+100 :@"1"];
-    
 }
 
 // text field delegate methods
@@ -87,19 +84,42 @@
     
     if (![loginTextField.text  isEqual: @"username"]) {
         loginTextField.layer.borderColor = venetianRedColor.CGColor;
-        authorizeButton.tintColor = littleBlueBoyColorAlphaDisabled;
+        //[authorizeButton setTitleColor:littleBlueBoyColorAlphaDisabled forState:UIControlStateDisabled];
     }
     
     if (![passwordTextField.text isEqual:@"password"]) {
         passwordTextField.layer.borderColor = venetianRedColor.CGColor;
-        authorizeButton.tintColor = littleBlueBoyColorAlphaDisabled;
+        //[authorizeButton setTitleColor:littleBlueBoyColorAlphaDisabled forState:UIControlStateDisabled];
     }
     
     if ([loginTextField.text  isEqual: @"username"] && [passwordTextField.text  isEqual: @"password"]) {
         loginTextField.layer.borderColor = turquoiseGreenColor.CGColor;
         passwordTextField.layer.borderColor = turquoiseGreenColor.CGColor;
         [self.view endEditing:true];
+        
+        // MARK: - Alert
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Welcome"
+                                       message:@"You are successfully authorized!"
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        
+        UILabel *alertTextLabel = [[UILabel alloc] init];
+        alertTextLabel.text = @"Refresh";
+        alertTextLabel.tintColor = [UIColor redColor];
+
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:alertTextLabel.text style:UIAlertActionStyleDefault
+           handler:^(UIAlertAction * action) {
+            self->loginTextField.text = @"";
+            self->passwordTextField.text = @"";
+            self->loginTextField.layer.borderColor = [UIColor blackColor].CGColor;
+            self->passwordTextField.layer.borderColor = [UIColor blackColor].CGColor;
+            self->authorizeButton.backgroundColor = [UIColor whiteColor];
+        }];
+
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
     }
+    
+    //[authorizeButton setTitleColor:littleBlueBoyColorAlphaDisabled forState:UIControlStateDisabled];
 }
 
 // MARK: - School Name Label
@@ -132,7 +152,7 @@
     loginTextField.keyboardType = UIKeyboardAppearanceDefault;
     loginTextField.returnKeyType = UIReturnKeyDone;
     loginTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    loginTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;  //?
+    loginTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     loginTextField.delegate = self;
     
     [self.view addSubview:loginTextField];
@@ -152,7 +172,7 @@
     passwordTextField.keyboardType = UIKeyboardAppearanceDefault;
     passwordTextField.returnKeyType = UIReturnKeyDone;
     passwordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    passwordTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;   //?
+    passwordTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     passwordTextField.delegate = self;
     
     [self.view addSubview:passwordTextField];
@@ -193,19 +213,6 @@
     [authorizeButton addTarget:self action:@selector(authorizeButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:authorizeButton];
-}
-
-// MARK: - Round Button
-
-- (void) createRoundButton: (CGFloat)positionY :(NSString *)numberText {
-    UIButton *roundButtonOne = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    [roundButtonOne setTitle:numberText forState:UIControlStateNormal];
-    [roundButtonOne addTarget:self action:@selector(roundButtonOneTapped:) forControlEvents:UIControlEventTouchUpInside];
-    roundButtonOne.frame = CGRectMake(0, positionY, roundButtonWidth, roundButtonWidth);
-    roundButtonOne.clipsToBounds = YES;
-    roundButtonOne.layer.cornerRadius = 25;
-    roundButtonOne.layer.borderColor = littleBlueBoyColor.CGColor;
 }
 
 @end
